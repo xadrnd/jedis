@@ -5,6 +5,8 @@ import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 
+import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
+
 import redis.clients.jedis.exceptions.JedisConnectionException;
 
 public abstract class JedisClusterConnectionHandler {
@@ -82,7 +84,13 @@ public abstract class JedisClusterConnectionHandler {
 	if (nodes.containsKey(nodeKey))
 	    return;
 	
-	JedisPool nodePool = new JedisPool(node.getHost(), node.getPort());
+    if (node.getHost().equals("127.0.0.1")) {
+        return;
+    }
+	
+    GenericObjectPoolConfig config = new GenericObjectPoolConfig();
+    config.setMaxWaitMillis(20);
+	JedisPool nodePool = new JedisPool(config, node.getHost(), node.getPort());
 	nodes.put(nodeKey, nodePool);
     }
 

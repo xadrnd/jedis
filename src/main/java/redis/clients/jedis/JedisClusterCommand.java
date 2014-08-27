@@ -103,7 +103,7 @@ public abstract class JedisClusterCommand<T> {
 		connection = connectionHandler
 			.getConnectionFromSlot(JedisClusterCRC16.getSlot(key));
 	    }
-
+	    
 	    if (asking) {
 		// TODO: Pipeline asking with the original command to make it
 		// faster....
@@ -132,9 +132,17 @@ public abstract class JedisClusterCommand<T> {
 		// TODO : In antirez's redis-rb-cluster implementation, 
 		// it rebuilds cluster's slot and node cache
 	    }
+	    
+        // Get host from connection and set jre.getTargetNode
+        HostAndPort correctTargetNode = jre.getTargetNode();
+        if (jre.getTargetNode().getHost().equals("127.0.0.1")) {
+            Client tempClient = connection.getClient();
+            correctTargetNode = new HostAndPort(tempClient.getHost(), jre.getTargetNode().getPort());
+            System.out.println("JedisClusterCommand: Changing host 127.0.0.1 and port " + tempClient.getPort() + " to " + tempClient.getHost() + " and port is " + jre.getTargetNode().getPort() + " for slot " + jre.getSlot() + " with key " + new String(key));
+        }
 
 	    this.connectionHandler.assignSlotToNode(jre.getSlot(),
-		    jre.getTargetNode());
+	            correctTargetNode);
 
 	    releaseConnection(connection, false);
 	    connection = null;
@@ -161,7 +169,7 @@ public abstract class JedisClusterCommand<T> {
             connection = connectionHandler
                 .getConnectionFromSlot(JedisClusterCRC16.getSlot(key));
             }
-
+            
             if (asking) {
             // TODO: Pipeline asking with the original command to make it
             // faster....
@@ -190,9 +198,18 @@ public abstract class JedisClusterCommand<T> {
             // TODO : In antirez's redis-rb-cluster implementation, 
             // it rebuilds cluster's slot and node cache
             }
+            
+            // Get host from connection and set jre.getTargetNode
+            HostAndPort correctTargetNode = jre.getTargetNode();
+            if (jre.getTargetNode().getHost().equals("127.0.0.1")) {
+                Client tempClient = connection.getClient();
+                correctTargetNode = new HostAndPort(tempClient.getHost(), jre.getTargetNode().getPort());
+                System.out.println("JedisClusterCommand: Changing host 127.0.0.1 and port " + tempClient.getPort() + " to " + tempClient.getHost() + " and port is " + jre.getTargetNode().getPort() + " for slot " + jre.getSlot() + " with key " + new String(key));
+            }
 
             this.connectionHandler.assignSlotToNode(jre.getSlot(),
-                jre.getTargetNode());
+                    correctTargetNode);
+            
 
             releaseConnection(connection, false);
             connection = null;
