@@ -138,7 +138,7 @@ public abstract class JedisClusterCommand<T> {
         if (jre.getTargetNode().getHost().equals("127.0.0.1")) {
             Client tempClient = connection.getClient();
             correctTargetNode = new HostAndPort(tempClient.getHost(), jre.getTargetNode().getPort());
-            System.out.println("JedisClusterCommand: Changing host 127.0.0.1 and port " + tempClient.getPort() + " to " + tempClient.getHost() + " and port is " + jre.getTargetNode().getPort() + " for slot " + jre.getSlot() + " with key " + new String(key));
+            System.out.println("JedisClusterCommand: Changing host 127.0.0.1 and port " + tempClient.getPort() + " to " + tempClient.getHost() + " and port " + jre.getTargetNode().getPort() + " for slot " + jre.getSlot() + " with key " + new String(key));
         }
 
 	    this.connectionHandler.assignSlotToNode(jre.getSlot(),
@@ -204,7 +204,7 @@ public abstract class JedisClusterCommand<T> {
             if (jre.getTargetNode().getHost().equals("127.0.0.1")) {
                 Client tempClient = connection.getClient();
                 correctTargetNode = new HostAndPort(tempClient.getHost(), jre.getTargetNode().getPort());
-                System.out.println("JedisClusterCommand: Changing host 127.0.0.1 and port " + tempClient.getPort() + " to " + tempClient.getHost() + " and port is " + jre.getTargetNode().getPort() + " for slot " + jre.getSlot() + " with key " + new String(key));
+                System.out.println("JedisClusterCommand: Changing host 127.0.0.1 and port " + tempClient.getPort() + " to " + tempClient.getHost() + " and port " + jre.getTargetNode().getPort() + " for slot " + jre.getSlot() + " with key " + new String(key));
             }
 
             this.connectionHandler.assignSlotToNode(jre.getSlot(),

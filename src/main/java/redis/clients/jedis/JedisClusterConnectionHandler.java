@@ -70,8 +70,14 @@ public abstract class JedisClusterConnectionHandler {
     
     private void discoverClusterNodesAndSlots(Jedis jedis) {
 	String localNodes = jedis.clusterNodes();
+	
+	
 	for (String nodeInfo : localNodes.split("\n")) {
 	    HostAndPort node = getHostAndPortFromNodeLine(nodeInfo, jedis);
+	    if (node.getHost().equals("127.0.0.1")) {
+	        node = new HostAndPort(jedis.getClient().getHost(), node.getPort());
+	    }
+	    
 	    setNodeIfNotExist(node);
 	    
 	    JedisPool nodePool = nodes.get(getNodeKey(node));
